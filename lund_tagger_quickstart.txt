@@ -1,0 +1,67 @@
+NOTE 5/31 - These instructions are DEPRECATED. The original notebook and directly ported standalone versions of the Lund tagger are designated Version 0.0. All future versions (v0.1 and above) will include a command-line interface and require the “click” library. Refer to the v0.1 and above documentation.
+
+Setup and Dependencies
+----------
+
+	The Lund plane tagger code has dependencies on specific library versions, which may be incompatible with other programs. You will want to use a dedicated Python environment. The recommended solution is to use Miniconda (which also comes with its own package management system for libraries). Alternatively you could use virtualenv directly, or create a user-specific python installation.
+
+You will need the following libraries:
+
+* python 2.6
+* matplotlib 2.2.3
+* scikit-learn 0.19.2
+* h5py 2.9.0
+* tensorflow 1.12.0	
+* keras 2.2.4
+* jupyter (for the notebook versions - any recent version should work)
+
+The following combination of versions is KNOWN to work. Newer versions of some libraries may work, but newer versions of scikit-learn are known to cause issues
+
+Installing with Miniconda
+----------
+If you have not already, create a miniconda installation on the system you wish to use. To create an environment named lundtest, run the command:
+
+> conda create env -n lundtest python=2.6
+
+Switch into the enivronment by running:
+
+> conda activate lundtest 
+
+Then run the following commands to install the package versions specified above:
+
+> conda install matplotlib=2.2.3
+> conda install scikit-learn=0.19.2
+> conda install h5py=2.9.0
+> conda install tensorflow=1.12.0
+> conda install keras=2.2.4
+> conda install jupyter
+
+
+hanging settings and filenames
+--------- 
+
+All options in both versions are hardcoded into the scripts. You will need to edit the relevant sections to make changes. They are near the beginning of the code and indicated with comments. The functions used to handle the h5 file format accept tuples of filenames to be read simultaneously. The pT range is specified in the variables pt_min and pt_max. Output filenames are hardcoded in place in the output instructions, e.g.
+
+	pl.savefig(‘foobar.pdf’)
+
+
+
+Standalone and Notebook Versions
+---------
+
+There are two versions of the tagger(s): Jupyter notebook and executable python script. Both versions contain substantially the same code, but the standalone scripts will output plots to files, while the notebook versions will embed output plots in the notebook.
+
+To run the standalone versions:
+All scripts are python scriptsw and can be run using:
+
+> python CNN_Lund_Test.py
+
+To run the notebook versions:
+
+Activate your anaconda environment and run:
+> jupyter --notebook --no-browser
+
+You should be provided with a link to access the Jupyter instance. If you are running remotely on a cluster you may need to use SSH tunneling to access the notebook. It is better to use a hub service if available. Consult your system’s documentation; read notebook-tunneling.txt for a quick rundown.
+
+
+

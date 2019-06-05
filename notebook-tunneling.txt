@@ -1,0 +1,55 @@
+Remotely accessing a Jupyter notebook on a cluster using SSH tunneling (quick rundown)
+-----------
+
+	If you run Jupyter remotely on a SLURM managed cluster such as Cori, or encounter other situations where you may need to run a web application on a server only accessible on the Local Area Network of a remote system, you can use SSH to create an encrypted network tunnel. This will allow you to access the web application from your local system. 
+
+This can be divided into three steps.
+
+1. Start the application server
+2. Establish an SSH tunnel from your local machine to the server on the remote LAN
+3. Access the web application.
+
+If your remote installation provides JupyterHub, it is better to use this service instead. For systems at NERSC. a hub interface is provided through myNERSC. See the NERSC documentation. Cori also provides a Firefox installation on its interface nodes, and if your local the cluster LAN. 
+
+To run and access Jupyter on Cori using the SSH tunneling method:
+
+1. Start the applicaiton server:
+	Request compute nodes for an interactive session. You’ll want this so that you don’t lose your resource allocation if you make a mistake in this process and have to restart the server. Wait times for an interactive session can be long - it’s best to use a detached screen session to “wait in line.” Just don’t forget about your session and waste CPU time!
+
+Make a note of the compute node you have been assigned. This is the server you need to create a tunnel to. e.g., if you see the message:
+
+Assigned node nc131
+
+You need to remember the hostname “nc131.”
+
+Make a note also of the interface node you are using - for example on Cori, you might see “cori06“ in your command prompt, this means that you have been assigned interface node 6. You need to reconnect to this same node to recover your screen session!
+
+On Cori, you cannot choose which interface node to connect to externally - you connect to cori.nersc.gov and are automatically assigned one. But once you have logged into Cori, you can access any interface or data transfer node you wish internally with ssh so that you can resume your session, by connecting on the LAN, e.g.:
+
+> ssh cori03
+
+and you will automatically be logged into a session on interface node #3. 
+
+Once you have been received your CPU allocation, you can run programs on the cluster in your interactive session using the “srun” command, the same way as you would submit a batch job. To start jupyter you can run:
+
+> srun jupyter --notebook --no-browser
+
+Make a note of the token URL you are given, the port in this URL, usually 8888, is the one you will need to forward.
+
+2. Establish the SSH tunnel
+
+After you have got the server running, you need to establish an ssh tunnel from your local machine to the compute node via an interface node. On OS X, Linux, or Windows with Cygwin, run:
+
+> ssh -l 8888:yourcomputenode:8888 yourusername@cori.nersc.gov
+
+substituting the relevant hosnames, account names, and ports. You will be prompted to log into cori like a normal session, and be connected to another shell instance on an interface node, but in the background, data will be routed between the compute node and your machine.
+
+On Windows with no POSIX environment, otehr software packages may be available to provide for SSH tunneling.
+
+3. Access the web application
+
+If you correctly set up the network tunnel, you should be able to use the URL provided to you when you started Jupyter directly in a web browser on your local machine to access the notebook.
+
+For more information, see the help file for SSH. On your local Unix-like machine or on Cori run:
+
+> man ssh
